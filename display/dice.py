@@ -46,13 +46,16 @@ class Dice:
             "└─────────┘",
         ),
     }
-    def __init__(self, dice_rolls: list[int], name = "") -> None:
+    def __init__(
+            self, dice_rolls: list[int], name = "", include_id_header=False
+    ) -> None:
         self.WIDTH = len(self.FACES[1][0])
         self.HEIGHT = len(self.FACES[1])
         self.SEPARATOR = " "
         
         self.dice_rolls = dice_rolls
         self.name = name
+        self.include_id_header = include_id_header
 
         l = len(dice_rolls)
         self.totalWidth = max(len(name), self.WIDTH * l + l - 1)
@@ -62,11 +65,12 @@ class Dice:
         L = len(dice_rolls)
 
         header = ["~"*self.totalWidth]
-        id_str = ''
-        for index in range(L):
-            id_str += f"{index + 1}".center(self.WIDTH) + self.SEPARATOR
-        header.append(id_str.center(self.totalWidth))
-        header.append("~"*self.totalWidth)
+        if self.include_id_header:
+            id_str = ''
+            for index in range(L):
+                id_str += f"{index + 1}".center(self.WIDTH) + self.SEPARATOR
+            header.append(id_str.center(self.totalWidth))
+            header.append("~"*self.totalWidth)
         return header
 
     def get_body(self):

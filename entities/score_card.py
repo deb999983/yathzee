@@ -5,20 +5,20 @@ from rules import Rule
 class ScoreCard:
     def __init__(self, rules: list[Rule]) -> None:
         self._score_map = OrderedDict()
+        self.marked_map = {}
         for rule in rules:
-            self._score_map[rule.id] = 0
+            self._score_map[rule.name] = 0
+            self.marked_map[rule.name] = False
 
-    def mark_rule(self, rule_id: str, score: int):
-        if self._score_map[rule_id]:
+    def mark_rule(self, rule_name: str, score: int):
+        if self.marked_map[rule_name]:
             raise ValueError("This rule has been filled")
-        self._score_map[rule_id] = score
+        self._score_map[rule_name] = score
+        self.marked_map[rule_name] = True
 
     def get_total(self):
-        return sum(self._score_map.values())
+        return sum(filter(lambda v: v, self._score_map.values()))
     
     def get_scoremap(self):
         return self._score_map
-
-
-
-
+            

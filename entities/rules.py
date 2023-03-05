@@ -2,41 +2,57 @@ from collections import Counter
 
 
 class Rule:
-    def __init__(self, id, name, desc) -> None:
-        self.id = id
-        self.name = name
-        self.desc = desc
-    
+    def __init__(self, **kwargs) -> None:    
+        self.id = kwargs["id"]
+        self.name = kwargs["name"]
     def get_score(self, dices: list[int]) -> int:
         pass
 
 
 class CountOnlyOne(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "only_ones"), name=kwargs.get("name", "Only Ones"))
+        
     def get_score(self, dices: list[int]) -> int:
         return sum(filter(lambda d: d == 1, dices))
 
 
 class CountOnlyTwo(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "only_twos"), name=kwargs.get("name", "Only Twos"))
+
     def get_score(self, dices: list[int]) -> int:
         return sum(filter(lambda d: d == 2, dices))
 
 
 class CountOnlyThree(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "only_threes"), name=kwargs.get("name", "Only Threes"))
+
     def get_score(self, dices: list[int]) -> int:
         return sum(filter(lambda d: d == 3, dices))
 
 
 class CountOnlyFour(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "only_fours"), name=kwargs.get("name", "Only Fours"))
+
     def get_score(self, dices: list[int]) -> int:
         return sum(filter(lambda d: d == 4, dices))
 
 
 class CountOnlyFive(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "only_fives"), name=kwargs.get("name", "Only Fives"))
+
     def get_score(self, dices: list[int]) -> int:
         return sum(filter(lambda d: d == 5, dices))
 
 
 class CountOnlySix(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "only_sixes"), name=kwargs.get("name", "Only Sixes"))
+
     def get_score(self, dices: list[int]) -> int:
         return sum(filter(lambda d: d == 6, dices))
 
@@ -51,6 +67,9 @@ class OfAKindMixin:
 
 
 class ThreeOfAKind(Rule, OfAKindMixin):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "three_of_a_kind"), name=kwargs.get("name", "Three of a Kind"))
+
     def get_score(self, dices: list[int]) -> int:
         if not self.is_kind(3, dices):
             return 0
@@ -58,6 +77,9 @@ class ThreeOfAKind(Rule, OfAKindMixin):
 
 
 class FourOfAKind(Rule, OfAKindMixin):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "four_of_a_kind"), name=kwargs.get("name", "Four of a Kind"))
+
     def get_score(self, dices: list[int]) -> int:
         if not self.is_kind(4, dices):
             return 0
@@ -65,6 +87,9 @@ class FourOfAKind(Rule, OfAKindMixin):
 
 
 class FiveOfAKind(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "five_of_a_kind"), name=kwargs.get("name", "Five of a Kind"))
+
     def get_score(self, dices: list[int]) -> int:
         if not self.is_kind(5, dices):
             return 0
@@ -89,6 +114,9 @@ class InARowMixin:
 
 
 class FourInARow(Rule, InARowMixin):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "four_in_a_row"), name=kwargs.get("name", "Four in a row"))
+
     def get_score(self, dices: list[int]) -> int:
         if not self.in_a_row(4, dices):
             return 0
@@ -96,6 +124,9 @@ class FourInARow(Rule, InARowMixin):
 
 
 class FiveInARow(Rule, InARowMixin):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "five_in_a_row"), name=kwargs.get("name", "Five in a Row"))
+
     def get_score(self, dices: list[int]) -> int:
         if not self.in_a_row(4, dices):
             return 0
@@ -103,7 +134,11 @@ class FiveInARow(Rule, InARowMixin):
 
 
 class Anything(Rule):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(id=kwargs.get("id", "anything"), name=kwargs.get("name", "Anything"))
+    
     def get_score(self, dices: list[int]) -> int:
-        return 50
+        return sum(dices)
+
 
 

@@ -67,7 +67,7 @@ class Table:
         ]
 
 
-class TableDisplay:
+class Display:
     def __init__(self, *tables: list[Table]):
         self.tables = tables
         self.separator = '    '
@@ -119,8 +119,8 @@ class TableDisplay:
 
     def display(self):
         rows = self.get_rows()
-        rows = self.apply_y_padding(rows)
-        rows = self.apply_x_padding(rows)
+        # rows = self.apply_y_padding(rows)
+        # rows = self.apply_x_padding(rows)
 
 
         print("\n".join(rows))
@@ -149,17 +149,17 @@ def run():
         ],
         name="Player-2"
     )  
-    tg = TableDisplay(t1, t2, t1, t2)
+    tg = Display(t1, t2, t1, t2)
     tg.display()
 
     d1 = Dice([2,5,1,1], name="Select to Keep")
     d2 = Dice([5], name="You have Selected")
     d3 = Dice([3,6,6], name="New Rolls")
 
-    tg = TableDisplay(d1)
+    tg = Display(d1)
     tg.display()
 
-    tg = TableDisplay(d2, d3)
+    tg = Display(d2, d3)
     tg.display()
 
-run()
+# run()
