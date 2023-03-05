@@ -37,10 +37,8 @@ class Player:
         player.saved_dices = []
         player.dices_to_roll = 4
         for i in range(3):
-            rolled_dices = []
-            if player.dices_to_roll:
-                rolled_dices = [random.randint(1, 6) for i in range(player.dices_to_roll)]
-            
+            rolled_dices = self.roll_dices()
+            if rolled_dices:
                 display_dices = []
                 if player.saved_dices:
                     display_dices.append(Dice(player.saved_dices, name=f"Turn {i + 1}, Saved Dices..."))
@@ -50,9 +48,13 @@ class Player:
 
             all_dices = [*player.saved_dices, *rolled_dices] 
             if rolled_dices and i + 1 < 3:
-                tg = Display(Dice(all_dices, name=f"Turn {i + 1}, Select dices to keep:", include_id_header=True))
+                tg = Display(
+                    ScoreCardDisplay(self.score_card, title="Your Score"),
+                    Dice(all_dices, name=f"Turn {i + 1}, Select dices to keep:", include_id_header=True),
+                    ScoreCardDisplay(Player.generate_possible_scores(game_rules, all_dices), title="Possible Scores With This Combination.")
+                )
                 tg.display()
-                dices_to_keep = input()
+                dices_to_keep = input("Select dices to keep (comma separated ids. Ex: 2,1,3): ")
                 if dices_to_keep:
                     dices_to_keep = list(map(int, dices_to_keep.split(',')))
                     player.saved_dices = [all_dices[index - 1] for index in dices_to_keep]
@@ -67,23 +69,25 @@ class Player:
         print(f"End {player.name} Turn".center(self.width, "-") + "\n")
         return
     
+    def roll_dices(self):
+        if not self.dices_to_roll:
+            return []
+        return [random.randint(1, 6) for i in range(self.dices_to_roll)]
 
     def choose_score(self, game_rules: list[Rule], all_dices: list[int]):
         choice = None
         while not choice:
-            Display(Dice(all_dices, name=f"Final dices:", include_id_header=True)).display()
-            possible_scores = Player.generate_possible_scores(game_rules, all_dices)
             Display(
                 ScoreCardDisplay(self.score_card, title="Your Score"),
-                ScoreCardDisplay(possible_scores, title="Choose Your Next Score")
+                Dice(all_dices, name=f"Final dices:", include_id_header=True),
+                ScoreCardDisplay(Player.generate_possible_scores(game_rules, all_dices), title="Possible Scores With This Combination.")
             ).display()
             try:
-                choice = int(input())
+                choice = int(input("Choose a serial no: "))
                 game_rules[choice - 1] # Test index
             except Exception:
                 print(f"Invalid Score choosen, please pick a valid score.".center(self.width, "."))
                 choice = None
-            time.sleep(0.5)
         return choice - 1
     
     def mark_rule(self, game_rules, all_dices:list[int]):
@@ -98,4 +102,3 @@ class Player:
             except ValueError as e:
                 print("\n")
                 print(f"You have already selected [{rule.name}], please select a different score".center(self.width, '.'))
-            time.sleep(0.5)

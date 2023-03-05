@@ -37,10 +37,10 @@ class Game:
         return self.round == 8
 
     def next_round(self):
-        print(f"Round {self.round}".center(self.width, "=") + "\n")
+        print(f"Round {self.round} Starts".center(self.width, "+") + "\n")
         for player in self.players:
             player.next_turn(self._rules)
-        print(f"Round {self.round} Ends".center(self.width, "=") + "\n")   
+        print(f"Round {self.round} Ends".center(self.width, "+") + "\n")   
 
     def pick_winner(self) -> Player:
         winner: Player = None
@@ -49,6 +49,7 @@ class Game:
             total_score = player.score()
             if total_score >= max_score:
                 winner = player
+                max_score = total_score
         return winner
 
     def start(self):
@@ -63,7 +64,7 @@ class Game:
         
         # Pick Winner
         winner = self.pick_winner()
-        print(f"Winner is {winner.name}, with a score of {winner.score()}".center(self.width, '*'))
+        print(f"  Winner is {winner.name}, with a score of {winner.score()}  ".center(self.width, '*') + "\n")
 
 
 def run():

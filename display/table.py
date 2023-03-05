@@ -70,20 +70,18 @@ class Table:
 class Display:
     def __init__(self, *tables: list[Table]):
         self.tables = tables
-        self.separator = '    '
+        self.separator = '        '
 
         self.max_rows = max(map(lambda t: len(t.data), self.tables))
         self.py = 0
-        self.px = 4
-        self.width = sum(map(lambda t: len(t.data[0]), self.tables)) + self.px + len(self.separator) * (len(self.tables) - 1)
+        self.px = 10
+        self.width = sum(map(lambda t: max(len(t.name), len(t.data[0])), self.tables)) + self.px + len(self.separator) * (len(self.tables) - 1)
     
     def apply_y_padding(self, rows):
         rows = [
             "─" * self.width,
             " " * self.width,
-            " " * self.width,
             *rows,
-            " " * self.width,
             " " * self.width,
             "─" * self.width
         ]
@@ -102,7 +100,7 @@ class Display:
         header_row = []
         for i in range(len(self.tables)):
             data = self.tables[i].data
-            rowWidth = len(data[0])
+            rowWidth = max(len(self.tables[i].name), len(data[0]))
             header_row.append(self.tables[i].name.center(rowWidth))
         rows.append(self.separator.join(header_row).center(self.width))
         
@@ -110,6 +108,7 @@ class Display:
             row = []
             for table in self.tables:
                 t = table.data
+                rowWidth = len(t[0])
                 try:
                     row.append(t[r])
                 except IndexError as e:
@@ -119,12 +118,11 @@ class Display:
 
     def display(self):
         rows = self.get_rows()
-        # rows = self.apply_y_padding(rows)
-        # rows = self.apply_x_padding(rows)
+        rows = self.apply_y_padding(rows)
+        rows = self.apply_x_padding(rows)
 
 
         print("\n".join(rows))
-        print("\n")
 
 
 def run():

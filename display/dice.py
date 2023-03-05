@@ -66,10 +66,10 @@ class Dice:
 
         header = ["~"*self.totalWidth]
         if self.include_id_header:
-            id_str = ''
+            ids = []
             for index in range(L):
-                id_str += f"{index + 1}".center(self.WIDTH) + self.SEPARATOR
-            header.append(id_str.center(self.totalWidth))
+                ids.append(f"{index + 1}".center(self.WIDTH))
+            header.append(self.SEPARATOR.join(ids).center(self.totalWidth))
             header.append("~"*self.totalWidth)
         return header
 
