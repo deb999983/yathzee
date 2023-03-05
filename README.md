@@ -260,5 +260,11 @@ Choose a serial no from possible scores: 4
 
 ```
 
+A lot of other improvements can be done as well.
+- Like detecting a yathzee and automatically choosing it as a selected score.
+- If a user selects **0** score, atleast give a warning.
+- Change Display class to take breakers as well.
+- Testcases :)
+
 
 
