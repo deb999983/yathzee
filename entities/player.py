@@ -18,9 +18,6 @@ class Player:
     def score(self):
         return self.score_card.get_total()
 
-    def roll(self):
-        pass
-
     def choose_result(self, rule_id):
         self.score_card.mark_rule(rule_id)
 
@@ -43,28 +40,31 @@ class Player:
                 if player.saved_dices:
                     display_dices.append(Dice(player.saved_dices, name=f"Turn {i + 1}, Saved Dices..."))
                 display_dices.append(Dice(rolled_dices, name=f"Turn {i + 1}, Rolled {player.dices_to_roll} Dices..."))
-                tg = Display(*display_dices)
-                tg.display()
+                Display(*display_dices)
 
             all_dices = [*player.saved_dices, *rolled_dices] 
+            Display(
+                ScoreCardDisplay(self.score_card, title="Your Score"),
+                Dice(all_dices, name=f"Turn {i + 1}, Current Combination:", include_id_header=True),
+                ScoreCardDisplay(Player.generate_possible_scores(game_rules, all_dices), title="Possible Scores With This Combination.")
+            )
+
             if rolled_dices and i + 1 < 3:
-                tg = Display(
-                    ScoreCardDisplay(self.score_card, title="Your Score"),
-                    Dice(all_dices, name=f"Turn {i + 1}, Select dices to keep:", include_id_header=True),
-                    ScoreCardDisplay(Player.generate_possible_scores(game_rules, all_dices), title="Possible Scores With This Combination.")
-                )
-                tg.display()
-                dices_to_keep = input("Select dices to keep (comma separated ids. Ex: 2,1,3): ")
-                if dices_to_keep:
-                    dices_to_keep = list(map(int, dices_to_keep.split(',')))
-                    player.saved_dices = [all_dices[index - 1] for index in dices_to_keep]
-                    player.dices_to_roll = 4 - len(player.saved_dices)
+                choice = input("Select score and end turn(y/n)? ")
+                if choice == "y":
+                    self.mark_rule(game_rules, all_dices)
+                    break
                 else:
-                    player.saved_dices = []
-                    player.dices_to_roll = 4
+                    dices_to_keep = input("Select dices to keep (comma separated ids. Ex: 2,1,3): ")
+                    if dices_to_keep:
+                        dices_to_keep = list(map(int, dices_to_keep.split(',')))
+                        player.saved_dices = [all_dices[index - 1] for index in dices_to_keep]
+                        player.dices_to_roll = 4 - len(player.saved_dices)
+                    else:
+                        player.saved_dices = []
+                        player.dices_to_roll = 4
             else:
                 self.mark_rule(game_rules, all_dices)
-                break
 
         print(f"End {player.name} Turn".center(self.width, "-") + "\n")
         return
@@ -77,13 +77,8 @@ class Player:
     def choose_score(self, game_rules: list[Rule], all_dices: list[int]):
         choice = None
         while not choice:
-            Display(
-                ScoreCardDisplay(self.score_card, title="Your Score"),
-                Dice(all_dices, name=f"Final dices:", include_id_header=True),
-                ScoreCardDisplay(Player.generate_possible_scores(game_rules, all_dices), title="Possible Scores With This Combination.")
-            ).display()
             try:
-                choice = int(input("Choose a serial no: "))
+                choice = int(input("Choose a serial no from possible scores: "))
                 game_rules[choice - 1] # Test index
             except Exception:
                 print(f"Invalid Score choosen, please pick a valid score.".center(self.width, "."))
@@ -97,7 +92,6 @@ class Player:
                 score_choice = self.choose_score(game_rules, all_dices)
                 rule = game_rules[score_choice]
                 self.score_card.mark_rule(rule.name, rule.get_score(all_dices))
-                Display(ScoreCardDisplay(self.score_card, title="Your score")).display()
                 break
             except ValueError as e:
                 print("\n")

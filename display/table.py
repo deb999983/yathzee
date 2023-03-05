@@ -76,8 +76,9 @@ class Display:
         self.py = 0
         self.px = 10
         self.width = sum(map(lambda t: max(len(t.name), len(t.data[0])), self.tables)) + self.px + len(self.separator) * (len(self.tables) - 1)
+        self._display()
     
-    def apply_y_padding(self, rows):
+    def _apply_y_padding(self, rows):
         rows = [
             "─" * self.width,
             " " * self.width,
@@ -87,14 +88,14 @@ class Display:
         ]
         return rows
     
-    def apply_x_padding(self, rows):
+    def _apply_x_padding(self, rows):
         padded_rows = []
         for row in rows[1:-1]:
             r = ["|", *row[1:-1], "|"]
             padded_rows.append("".join(r))
         return [rows[0], *padded_rows, rows[-1]]
 
-    def get_rows(self):
+    def _get_rows(self):
         max_rows = self.max_rows
         rows = []
         header_row = []
@@ -116,10 +117,10 @@ class Display:
             rows.append(self.separator.join(row).center(self.width))
         return rows
 
-    def display(self):
-        rows = self.get_rows()
-        rows = self.apply_y_padding(rows)
-        rows = self.apply_x_padding(rows)
+    def _display(self):
+        rows = self._get_rows()
+        rows = self._apply_y_padding(rows)
+        rows = self._apply_x_padding(rows)
 
 
         print("\n".join(rows))
@@ -148,16 +149,16 @@ def run():
         name="Player-2"
     )  
     tg = Display(t1, t2, t1, t2)
-    tg.display()
+    tg
 
     d1 = Dice([2,5,1,1], name="Select to Keep")
     d2 = Dice([5], name="You have Selected")
     d3 = Dice([3,6,6], name="New Rolls")
 
     tg = Display(d1)
-    tg.display()
+    tg
 
     tg = Display(d2, d3)
-    tg.display()
+    tg
 
 # run()

@@ -60,7 +60,7 @@ class Game:
         # Display score cards
         Display(
             *[ScoreCardDisplay(player.score_card, title=f"{player.name} Scorecard") for player in self.players]
-        ).display()
+        )
         
         # Pick Winner
         winner = self.pick_winner()
