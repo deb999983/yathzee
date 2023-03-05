@@ -40,6 +40,11 @@ class Game:
             self.next_round()
             self.round = self.round + 1
         
+        Display(
+            *[ScoreCardDisplay(player.score_card, title=f"{player.name} Scorecard") for player in self.players]
+        ).display()
+        
+        
     def over(self) -> bool:
         return self.round == 8
     
