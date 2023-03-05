@@ -17,17 +17,11 @@ class Game:
             FourInARow(),
             Anything(),
         ]
-        self.players = [
-            Player(name="John", score_card=ScoreCard(self._rules)),
-            Player(name="Bob", score_card=ScoreCard(self._rules))
-        ]
+        self.players = []
         self.round = 0
         self.width = 100
+        self.max_dices = 4
     
-    def add_rule(self, rule: Rule):
-        self._rules.append(rule)
-        return self
-
     def add_player(self, player_name):
         score_card = ScoreCard(self._rules)
         player = Player(player_name, score_card)
@@ -39,10 +33,16 @@ class Game:
     def next_round(self):
         print(f"Round {self.round} Starts".center(self.width, "+") + "\n")
         for player in self.players:
-            player.next_turn(self._rules)
+            player.next_turn(self.max_dices, self._rules)
         print(f"Round {self.round} Ends".center(self.width, "+") + "\n")   
 
-    def pick_winner(self) -> Player:
+    def show_winner(self) -> Player:
+        # Display the score card.
+        Display(
+            *[ScoreCardDisplay(player.score_card, title=f"{player.name} Scorecard") for player in self.players]
+        )
+
+        # Select Winner
         winner: Player = None
         max_score: int = 0 
         for player in self.players:
@@ -50,22 +50,25 @@ class Game:
             if total_score >= max_score:
                 winner = player
                 max_score = total_score
-        return winner
-
-    def start(self):
-        while not self.over():
-            self.next_round()
-            self.round = self.round + 1
         
-        # Display score cards
-        Display(
-            *[ScoreCardDisplay(player.score_card, title=f"{player.name} Scorecard") for player in self.players]
-        )
-        
-        # Pick Winner
-        winner = self.pick_winner()
+        # Show Winner
         print(f"  Winner is {winner.name}, with a score of {winner.score()}  ".center(self.width, '*') + "\n")
 
+    def add_players(self):
+        choice = 'y'
+        while choice in ['y', 'Y', 'YES', 'yes']:
+            player_name = input("Enter player name: ")
+            self.add_player(player_name)            
+            choice = input("Add new player (y/n)?")
+
+    def start(self):
+        self.add_players()
+        while not self.over():
+            self.round = self.round + 1
+            self.next_round()
+        
+        # Display score cards and Pick Winner
+        self.show_winner()
 
 def run():
     g = Game()

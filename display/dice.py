@@ -1,7 +1,9 @@
 from functools import cached_property
 
+from display.table import DisplayComponent
 
-class Dice:
+
+class Dice(DisplayComponent):
     FACES = {
         1: (
             "┌─────────┐",

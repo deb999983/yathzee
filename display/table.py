@@ -1,8 +1,16 @@
 from functools import cached_property
-from display.dice import Dice
 
 
-class Table:
+class DisplayComponent:
+    def get_header(self) -> list[str]:
+        pass
+    def get_body(self) -> list[str]:
+        pass
+    def data(self) -> list[str]:
+        pass
+
+
+class Table(DisplayComponent):
     def __init__(self, headers: list, data: list, name: str="") -> None:
         self.COLUMNS = len(headers)
         self.ROWS = 1 + len(data)
@@ -68,7 +76,7 @@ class Table:
 
 
 class Display:
-    def __init__(self, *tables: list[Table]):
+    def __init__(self, *tables: list[DisplayComponent]):
         self.tables = tables
         self.separator = '        '
 
@@ -126,39 +134,39 @@ class Display:
         print("\n".join(rows))
 
 
-def run():
-    t1 = Table(
-        headers=["S-No", "Title", "Value"],
-        data=[
-            ["1", "Only Ones", ""],
-            ["2", "Only Threes", ""],
-            ["3", "Only Fours", "20"],
+# def run():
+#     t1 = Table(
+#         headers=["S-No", "Title", "Value"],
+#         data=[
+#             ["1", "Only Ones", ""],
+#             ["2", "Only Threes", ""],
+#             ["3", "Only Fours", "20"],
 
-            ["4", "Only Ones", "30"],
-            ["5", "Only Threes", ""],
-            ["6", "Only Fours", "24"],
-        ],
-        name="Player-1"
-    )
-    t2 = Table(
-        headers=["S-No", "Title", "Value"],
-        data=[
-            ["1", "Only Ones", ""],
-            ["2", "Only Threes", ""],
-        ],
-        name="Player-2"
-    )  
-    tg = Display(t1, t2, t1, t2)
-    tg
+#             ["4", "Only Ones", "30"],
+#             ["5", "Only Threes", ""],
+#             ["6", "Only Fours", "24"],
+#         ],
+#         name="Player-1"
+#     )
+#     t2 = Table(
+#         headers=["S-No", "Title", "Value"],
+#         data=[
+#             ["1", "Only Ones", ""],
+#             ["2", "Only Threes", ""],
+#         ],
+#         name="Player-2"
+#     )  
+#     tg = Display(t1, t2, t1, t2)
+#     tg
 
-    d1 = Dice([2,5,1,1], name="Select to Keep")
-    d2 = Dice([5], name="You have Selected")
-    d3 = Dice([3,6,6], name="New Rolls")
+#     d1 = Dice([2,5,1,1], name="Select to Keep")
+#     d2 = Dice([5], name="You have Selected")
+#     d3 = Dice([3,6,6], name="New Rolls")
 
-    tg = Display(d1)
-    tg
+#     tg = Display(d1)
+#     tg
 
-    tg = Display(d2, d3)
-    tg
+#     tg = Display(d2, d3)
+#     tg
 
 # run()
