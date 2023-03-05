@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from rules import Rule
+from entities.rules import Rule
 
 
 class ScoreCard:
