@@ -100,18 +100,16 @@ class InARowMixin:
     def in_a_row(self, count: int, dices: list[int]) -> bool:
         dices = sorted(dices)
         i, L = 0, len(dices)
-        while i < L:
-            j, c = i + 1, 1
-            while j < L:
-                if dices[j] != dices[j - 1] + 1:
-                    break
+        c = 1
+        while i < L - 1:
+            if dices[i + 1] != dices[i] + 1:
+                c = 1
+            else:
                 c = c + 1
-                j = j + 1            
-            if c == count:
-                return True
-            i = j
+                if c == count:
+                    return True
+            i = i + 1
         return False
-
 
 class FourInARow(Rule, InARowMixin):
     def __init__(self, **kwargs) -> None:
