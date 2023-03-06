@@ -113,4 +113,4 @@ class Anything(Rule):
         return sum(dices)
 
 
-
+YATHZEE_RULES = [FourOfAKind(), FourInARow()]

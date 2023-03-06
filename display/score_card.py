@@ -19,7 +19,7 @@ class ScoreCardDisplay(DisplayComponent):
 
 
     def prepare_score_data(self, score_card) -> list[tuple]:
-        score_data = [(str(index + 1), rule_score[0], str(rule_score[1]) if rule_score[1] or score_card.marked_map[rule_score[0]] else '') for index, rule_score in enumerate(self.score_card.items())]
+        score_data = [(str(index + 1), rule_score[0], str(rule_score[1]) if rule_score[1] or score_card.is_marked(rule_score[0]) else '') for index, rule_score in enumerate(self.score_card.items())]
 
         if self.display_total:
             score_data.append(

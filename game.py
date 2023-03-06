@@ -28,7 +28,7 @@ class Game:
         self.players.append(player)
 
     def over(self) -> bool:
-        return self.round == 8
+        return self.round == len(self._rules)
 
     def next_round(self):
         print(f"Round {self.round} Starts".center(self.width, "+") + "\n")
