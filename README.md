@@ -266,5 +266,10 @@ A lot of other improvements can be done as well.
 - Change Display class to take breakers as well.
 - Testcases :)
 
+#### Edits:
+- Fixed a bug in detecting in a row rule.
+- Detecting and auto selecting if a yathzee forms.
+
+
 
 
