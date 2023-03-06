@@ -77,7 +77,7 @@ class FiveOfAKind(Rule):
 
 class InARowMixin:
     def in_a_row(self, count: int, dices: list[int]) -> bool:
-        dices = sorted(dices)
+        dices = sorted(set(dices))
         i, L = 0, len(dices)
         c = 1
         while i < L - 1:
